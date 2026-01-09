@@ -1,31 +1,37 @@
-type BadgeProps = {
-  text: string;
-  color?: "blue" | "purple" | "green";
-};
+import { BadgeProps } from "@/types";
+import { COLOR_SCHEME, DEFAULT_COLOR } from "@/constants/colors";
 
-const styles = {
+const BADGE_STYLES = {
   blue: {
-    bg: "bg-blueSoft",
-    text: "text-blue-600",
+    bg: "bg-blue-100 dark:bg-blue-900/50",
+    text: "text-blue-700 dark:text-blue-300",
   },
   purple: {
-    bg: "bg-primarySoft",
-    text: "text-primary",
+    bg: "bg-purple-100 dark:bg-purple-900/50",
+    text: "text-purple-700 dark:text-purple-300",
   },
   green: {
-    bg: "bg-greenSoft",
-    text: "text-emerald-600",
+    bg: "bg-emerald-100 dark:bg-emerald-900/50",
+    text: "text-emerald-700 dark:text-emerald-300",
   },
 };
 
+/**
+ * Badge Component
+ * Displays a colored badge with text content
+ */
 export default function Badge({
   text,
-  color = "purple",
+  color = DEFAULT_COLOR,
 }: BadgeProps) {
-  const style = styles[color];
+  const style = BADGE_STYLES[color];
 
   return (
-    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold tracking-tight ${style.bg} ${style.text}`}> 
+    <span
+      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold tracking-tight ${style.bg} ${style.text}`}
+      role="status"
+      aria-label={`Badge: ${text}`}
+    >
       {text}
     </span>
   );

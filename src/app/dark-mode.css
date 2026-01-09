@@ -1,0 +1,213 @@
+/* AGGRESSIVE Dark Mode Enforcement */
+/* This file uses maximum specificity to force dark mode colors */
+
+html.dark {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+html.dark body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* ALL direct children inherit dark theme */
+html.dark > body,
+html.dark main,
+html.dark section {
+  background-color: #000000 !important;
+}
+
+/* Headers - All white */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #ffffff !important;
+}
+
+/* Body text - Light gray */
+html.dark p,
+html.dark span:not([role="presentation"]) {
+  color: #ffffff !important;
+}
+
+/* Links - White */
+html.dark a {
+  color: #93c5fd !important; /* light blue */
+}
+
+html.dark a:hover {
+  color: #dbeafe !important; /* lighter blue */
+}
+
+/* Force background colors */
+html.dark .bg-white,
+html.dark .bg-gray-50,
+html.dark .bg-gray-100,
+html.dark .bg-gray-200,
+html.dark .bg-gray-300 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Remove overly aggressive overrides for badges */
+html.dark .bg-blue-50,
+html.dark .bg-purple-50,
+html.dark .bg-green-100 {
+  background-color: unset !important;
+  color: unset !important;
+}
+
+/* Ensure Tailwind classes take precedence */
+html.dark [class*="dark:bg-"] {
+  background-color: inherit !important;
+}
+
+html.dark [class*="dark:text-"] {
+  color: inherit !important;
+}
+
+/* Text color overrides */
+html.dark .text-gray-600,
+html.dark .text-gray-700,
+html.dark .text-gray-900 {
+  color: #ffffff !important;
+}
+
+html.dark .text-gray-300 {
+  color: #e5e7eb !important;
+}
+
+html.dark .text-blue-700 {
+  color: #93c5fd !important;
+}
+
+html.dark .text-purple-700 {
+  color: #e9d5ff !important;
+}
+
+html.dark .text-green-700,
+html.dark .text-emerald-600 {
+  color: #6ee7b7 !important;
+}
+
+/* Border colors */
+html.dark .border-gray-200,
+html.dark .border-gray-100,
+html.dark .border-gray-300 {
+  border-color: #374151 !important;
+}
+
+html.dark .border-blue-200 {
+  border-color: #0f172a !important;
+}
+
+/* Special classes for dark cards */
+html.dark .dark\:bg-\[\#0f1724\],
+html.dark [class*="dark:bg-[#0f1724]"] {
+  background-color: #0f1724 !important;
+}
+
+html.dark .dark\:bg-black,
+html.dark [class*="dark:bg-black"] {
+  background-color: #000000 !important;
+}
+
+html.dark .dark\:text-white,
+html.dark [class*="dark:text-white"] {
+  color: #ffffff !important;
+}
+
+html.dark .dark\:text-gray-300,
+html.dark [class*="dark:text-gray-300"] {
+  color: #d1d5db !important;
+}
+
+html.dark .dark\:text-gray-200,
+html.dark [class*="dark:text-gray-200"] {
+  color: #e5e7eb !important;
+}
+
+/* Buttons in dark mode */
+html.dark button {
+  color: #ffffff !important;
+}
+
+html.dark [class*="bg-primary"] {
+  background-color: #60a5fa !important;
+}
+
+/* Hover states */
+html.dark [class*="hover:bg-gray"]:hover {
+  background-color: #1f2937 !important;
+}
+
+html.dark [class*="hover:bg-blue"]:hover {
+  background-color: #1e40af !important;
+}
+
+html.dark [class*="hover:bg-purple"]:hover {
+  background-color: #4338ca !important;
+}
+
+/* Shadows */
+html.dark [class*="shadow-md"],
+html.dark [class*="shadow-lg"] {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Gradients */
+html.dark [class*="gradient"] {
+  background-color: #000000 !important;
+}
+
+/* Backdrops */
+html.dark [class*="backdrop-blur"] {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Header specific */
+html.dark header {
+  background-color: #000000 !important;
+  border-color: #374151 !important;
+}
+
+html.dark header [class*="bg-white"],
+html.dark header [class*="bg-gray"] {
+  background-color: transparent !important;
+}
+
+html.dark header a,
+html.dark header button {
+  color: #ffffff !important;
+}
+
+/* Navigation links */
+html.dark nav a {
+  color: #ffffff !important;
+}
+
+html.dark nav a:hover {
+  color: #93c5fd !important;
+}
+
+/* Ensure scrollbar is dark too */
+html.dark ::-webkit-scrollbar {
+  width: 8px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}

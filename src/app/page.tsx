@@ -5,12 +5,23 @@ import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-28 md:gap-36">
+    <main className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth">
 
-      <Hero />
-      <Skills />
-      <Projects />
-      <Contact />
+      {/* First screen: Hero + Skills together */}
+      <div className="snap-start min-h-screen flex flex-col justify-center">
+        <Hero />
+        <Skills />
+      </div>
+
+      {/* Projects occupies full viewport and snaps into view */}
+      <div className="snap-start">
+        <Projects />
+      </div>
+
+      {/* Contact as next snap */}
+      <div className="snap-start">
+        <Contact />
+      </div>
     </main>
   );
 }

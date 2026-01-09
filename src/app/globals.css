@@ -2,11 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("./dark-mode.css");
+
 @layer base {
+  :root {
+    /* Light theme variables */
+    --bg: 255 255 255;
+    --bg-card: 255 255 255;
+    --text-primary: 17 24 39; /* gray-900 */
+    --text-secondary: 75 85 99; /* gray-600 */
+    --muted: 100 116 139; /* gray-500 */
+    --border: 226 232 240; /* gray-200 */
+    --primary: 59 130 246; /* blue-500 */
+  }
+
+  .dark {
+    --bg: 0 0 0; /* pure black */
+    --bg-card: 0 0 0; /* pure black */
+    --text-primary: 255 255 255; /* white */
+    --text-secondary: 209 213 219; /* gray-300 */
+    --muted: 156 163 175; /* gray-400 */
+    --border: 55 65 81; /* gray-700 */
+    --primary: 96 165 250; /* blue-400 */
+  }
+
   body {
-    @apply bg-white text-textPrimary leading-relaxed font-sans antialiased;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text-primary));
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
+    line-height: 1.6;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   }
 
   h1 {
@@ -30,20 +56,65 @@
   }
 
   p {
-    @apply text-base md:text-lg text-textSecondary leading-relaxed max-w-prose;
-  }
-
-  section {
-    @apply py-12 md:py-16;
-  }
-
-  .card {
-    @apply bg-white rounded-3xl shadow-soft border border-gray-100 p-6 md:p-8;
+    @apply text-base md:text-lg leading-relaxed;
+    color: rgb(var(--text-secondary));
   }
 
   a:focus-visible,
   button:focus-visible {
     @apply outline-none ring-4 ring-primary/20 rounded-md;
   }
+}
+
+/* Dark-mode AGGRESSIVE overrides - force black and white */
+.dark {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.dark body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* ALL elements in dark mode get black bg and white text by default */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: #ffffff !important;
+}
+
+.dark p {
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+.dark span, .dark a {
+  color: #ffffff !important;
+}
+
+/* Force overrides for specific Tailwind utilities */
+.dark .bg-white { background-color: #000000 !important; }
+.dark .bg-gray-50 { background-color: #000000 !important; }
+.dark .bg-gray-100 { background-color: #000000 !important; }
+.dark .bg-gray-200 { background-color: #000000 !important; }
+
+.dark .text-gray-600 { color: #e5e7eb !important; }
+.dark .text-gray-700 { color: #ffffff !important; }
+.dark .text-gray-900 { color: #ffffff !important; }
+
+.dark .border-gray-200 { border-color: #374151 !important; }
+.dark .border-gray-100 { border-color: #374151 !important; }
+
+/* Card backgrounds */
+.dark .bg-blue-50 { background-color: #0f172a !important; }
+.dark .bg-purple-50 { background-color: #1e0a3f !important; }
+.dark .bg-emerald-50 { background-color: #0a2d2d !important; }
+.dark .bg-green-100 { background-color: #0f2d1a !important; }
+
+/* Shadows in dark */
+.dark .shadow-md { box-shadow: 0 6px 18px rgba(0,0,0,0.45) !important; }
+.dark .shadow-soft { box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important; }
+
+/* Utility to smoothly transition color changes */
+* {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 
