@@ -15,14 +15,36 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus("idle");
 
     try {
-      // TODO: Implement form submission logic
-      // For now, just show success message
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setSubmitStatus("success");
-      (e.target as HTMLFormElement).reset();
+      const formData = new FormData(e.target as HTMLFormElement);
+      const data = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        message: formData.get("message") as string,
+      };
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        (e.target as HTMLFormElement).reset();
+        // Reset success message after 5 seconds
+        setTimeout(() => setSubmitStatus("idle"), 5000);
+      } else {
+        const errorData = await response.json();
+        console.error("Error:", errorData);
+        setSubmitStatus("error");
+      }
     } catch (error) {
+      console.error("Submit error:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
