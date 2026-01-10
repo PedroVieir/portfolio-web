@@ -13,12 +13,13 @@ export default function Header() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    // Initialize theme from localStorage or prefers-color-scheme
+    // Initialize theme from localStorage. Default to light regardless of system preference.
     const saved = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
-    if (saved === "dark" || (!saved && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+    if (saved === "dark") {
       document.documentElement.classList.add("dark");
       setTheme("dark");
     } else {
+      // Default to light when no explicit user preference is stored
       document.documentElement.classList.remove("dark");
       setTheme("light");
     }
