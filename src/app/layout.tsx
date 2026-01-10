@@ -2,6 +2,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import { Inter } from "next/font/google";
 import { SITE_TITLE, SITE_DESCRIPTION } from "@/constants";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className="bg-white dark:bg-black text-gray-900 dark:text-white transition-colors">
         <Header />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
