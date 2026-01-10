@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Mailer } from "mailersend";
+import { MailerSend, EmailParams, Recipient } from "mailersend";
 
 /**
  * POST /api/contact
@@ -40,59 +40,55 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const mailer = new Mailer({ api_key: apiKey });
+    const mailer = new MailerSend({ apiKey: apiKey });
 
     // Send email to admin
-    await mailer.email.send({
-      from: {
+    const emailParamsAdmin = new EmailParams()
+      .setFrom({
         email: emailFrom,
         name: "Portfolio Contact",
-      },
-      to: [
-        {
-          email: emailTo,
-          name: "Admin",
-        },
-      ],
-      subject: `New Contact Form Submission from ${name}`,
-      html: `
+      })
+      .setTo([
+        new Recipient(emailTo, "Admin"),
+      ])
+      .setSubject(`New Contact Form Submission from ${name}`)
+      .setHtml(`
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, "<br>")}</p>
-      `,
-      text: `
+      `)
+      .setText(`
         New Contact Form Submission
         
         Name: ${name}
         Email: ${email}
         Message: ${message}
-      `,
-    });
+      `);
+
+    await mailer.email.send(emailParamsAdmin);
 
     // Send confirmation email to user
-    await mailer.email.send({
-      from: {
+    const emailParamsUser = new EmailParams()
+      .setFrom({
         email: emailFrom,
         name: "Portfolio",
-      },
-      to: [
-        {
-          email: email,
-          name: name,
-        },
-      ],
-      subject: "Message received - Portfolio",
-      html: `
+      })
+      .setTo([
+        new Recipient(email, name),
+      ])
+      .setSubject("Message received - Portfolio")
+      .setHtml(`
         <h2>Thank you for contacting me!</h2>
         <p>Hi ${name},</p>
         <p>I received your message and will get back to you as soon as possible.</p>
         <p>Best regards,</p>
         <p>Portfolio Team</p>
-      `,
-      text: `Thank you for contacting me!\n\nHi ${name},\n\nI received your message and will get back to you as soon as possible.\n\nBest regards,\nPortfolio Team`,
-    });
+      `)
+      .setText(`Thank you for contacting me!\n\nHi ${name},\n\nI received your message and will get back to you as soon as possible.\n\nBest regards,\nPortfolio Team`);
+
+    await mailer.email.send(emailParamsUser);
 
     console.log("Contact form submission sent successfully:", { name, email });
 
