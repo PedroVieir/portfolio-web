@@ -7,11 +7,20 @@
  * @property {string} message
  */
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_CONTACT_API_URL || "http://localhost:4000";
+const rawApiBase = process.env.NEXT_PUBLIC_CONTACT_API_URL || "http://localhost:4000";
 
-// Adding logs to debug the email sending process
-console.log("API_BASE_URL:", API_BASE_URL);
+function normalizeBaseUrl(url) {
+  if (!url) return url;
+  // If missing protocol, prepend https:// and warn
+  if (!/^https?:\/\//i.test(url)) {
+    console.warn("NEXT_PUBLIC_CONTACT_API_URL is missing protocol; prepending https://", url);
+    return `https://${url.replace(/\/$/, "")}`;
+  }
+  return url.replace(/\/$/, "");
+}
+
+const API_BASE_URL = normalizeBaseUrl(rawApiBase);
+console.log("API_BASE_URL (normalized):", API_BASE_URL);
 
 /**
  * Envia os dados do formulário para o backend.
@@ -23,28 +32,45 @@ console.log("API_BASE_URL:", API_BASE_URL);
 export async function sendContactMessage(payload) {
   console.log("Payload being sent:", payload);
 
-  const res = await fetch(`${API_BASE_URL}/contact`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  const requestUrl = `${API_BASE_URL}/contact`;
+  console.log("Request URL:", requestUrl);
 
-  console.log("Response status:", res.status);
+  let res;
+  try {
+    res = await fetch(requestUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (networkErr) {
+    console.error("Network error when sending request:", networkErr);
+    return { ok: false, error: "Network error", details: String(networkErr) };
+  }
+
+  console.log("Response status:", res.status, res.statusText);
 
   let data = null;
+  const contentType = res.headers.get("content-type") || "";
   try {
-    data = await res.json();
-    console.log("Response data:", data);
+    if (contentType.includes("application/json")) {
+      data = await res.json();
+      console.log("Response data (json):", data);
+    } else {
+      const text = await res.text();
+      console.log("Response text:", text);
+      data = text ? { text } : null;
+    }
   } catch (error) {
-    console.error("Error parsing response JSON:", error);
+    console.error("Error parsing response body:", error);
   }
 
   if (!res.ok) {
-    console.error("Error response from server:", data);
+    console.error("Error response from server:", { status: res.status, statusText: res.statusText, data });
+    const serverMsg = data?.error || data?.text || res.statusText || "Falha ao enviar mensagem";
     return {
       ok: false,
-      error: data?.error || "Falha ao enviar mensagem",
-      details: data?.details,
+      error: serverMsg,
+      details: { status: res.status, data },
     };
   }
 
