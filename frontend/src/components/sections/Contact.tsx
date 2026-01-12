@@ -1,46 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+console.log("Contact component module loaded");
+
 import Container from "../layout/Container";
 import { CONTACT_CONTENT } from "@/constants/contact";
+import { sendContactMessage } from "@/services/contato-api"; // ajuste o path se necessário
 
-/**
- * Contact Section
- * Contact form section with email and message fields
- */
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("handleSubmit invoked");
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
     try {
       const formData = new FormData(e.target as HTMLFormElement);
       const data = {
-        name: formData.get("name") as string,
-        email: formData.get("email") as string,
-        message: formData.get("message") as string,
+        name: (formData.get("name") as string) || "",
+        email: (formData.get("email") as string) || "",
+        message: (formData.get("message") as string) || "",
       };
 
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      console.log("Form data prepared:", data);
 
-      if (response.ok) {
+      const result = await sendContactMessage(data);
+
+      console.log("sendContactMessage returned:", result);
+
+      if (result.ok) {
         setSubmitStatus("success");
         (e.target as HTMLFormElement).reset();
-        // Reset success message after 5 seconds
         setTimeout(() => setSubmitStatus("idle"), 5000);
       } else {
-        const errorData = await response.json();
-        console.error("Error:", errorData);
+        console.error("Error:", result);
         setSubmitStatus("error");
       }
     } catch (error) {
@@ -55,20 +52,16 @@ export default function Contact() {
     <section id="contact" className="bg-gray-50 py-8 md:py-12 dark:bg-[#0f1724]" aria-label="Contact section">
       <Container>
         <div className="max-w-xl mx-auto">
-          {/* Section Title */}
           <div className="text-center mb-6 md:mb-8">
             <h2 className="text-xl md:text-2xl font-semibold mb-2 md:mb-4">
               {CONTACT_CONTENT.title}
             </h2>
-
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">
               {CONTACT_CONTENT.description}
             </p>
           </div>
 
-          {/* Contact Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-3 md:gap-4" noValidate>
-            {/* Name Input */}
             <div>
               <input
                 type="text"
@@ -80,7 +73,6 @@ export default function Contact() {
               />
             </div>
 
-            {/* Email Input */}
             <div>
               <input
                 type="email"
@@ -92,7 +84,6 @@ export default function Contact() {
               />
             </div>
 
-            {/* Message Textarea */}
             <div>
               <textarea
                 name="message"
@@ -104,7 +95,6 @@ export default function Contact() {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="bg-primary text-white rounded-lg py-2.5 md:py-3 text-sm md:text-base font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
@@ -113,7 +103,6 @@ export default function Contact() {
               {isSubmitting ? "Enviando..." : CONTACT_CONTENT.submitButton}
             </button>
 
-            {/* Status Messages */}
             {submitStatus === "success" && (
               <p className="text-emerald-600 text-center text-sm">
                 Mensagem enviada com sucesso! 🎉
