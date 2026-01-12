@@ -1,0 +1,13 @@
+{
+  "builds": [
+    { "src": "frontend/package.json", "use": "@vercel/next" }
+  ],
+  "routes": [],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "portfolio-web.railway.internal/:path*"
+    }
+  ]
+}
+ 
