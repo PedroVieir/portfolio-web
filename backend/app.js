@@ -14,10 +14,17 @@ const app = express();
 app.use(helmet());
 
 // CORS (restrinja ao seu domínio)
+const allowedOrigins = String(env.CORS_ORIGIN || "").split(",").map((s) => s.trim()).filter(Boolean);
+console.log("[Email API] CORS allowed origins:", allowedOrigins);
 app.use(
   cors({
-    origin: env.CORS_ORIGIN,
-    methods: ["GET", "POST"],
+    origin: function (origin, callback) {
+      // Sem origin (requests do servidor / curl) devem ser permitidas
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "OPTIONS"],
   })
 );
 
