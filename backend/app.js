@@ -7,6 +7,7 @@ const { env } = require("./src/config/env");
 const routes = require("./src/routes");
 const { notFound } = require("./src/middlewares/notFound.middleware");
 const { errorHandler } = require("./src/middlewares/error.middleware");
+const logger = require("./src/utils/logger");
 
 const app = express();
 
@@ -22,7 +23,7 @@ const allowedOrigins = String(env.CORS_ORIGIN || "")
   .map((s) => s.trim())
   .filter(Boolean);
 
-console.log("[Email API] CORS allowed origins:", allowedOrigins);
+logger.info("[Email API] CORS allowed origins:", allowedOrigins);
 
 app.use(
   cors({

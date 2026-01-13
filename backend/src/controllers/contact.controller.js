@@ -1,15 +1,21 @@
 const { sendContactEmail } = require("../services/email.service");
+const logger = require("../utils/logger");
 
 async function contact(req, res, next) {
   try {
-    console.log("[Email API] /contact received, body:", req.body);
+    // Avoid verbose logs in production
+    logger.debug("[Email API] /contact received", {
+      name: req.body?.name,
+      email: req.body?.email,
+      messageLength: String(req.body?.message || "").length,
+    });
 
     const result = await sendContactEmail(req.body);
 
-    console.log("[Email API] /contact processed, result:", result);
+    logger.info("[Email API] /contact processed", { accepted: result?.accepted?.length || 0 });
     res.status(200).json({ ok: true, result });
   } catch (err) {
-    console.error("[Email API] /contact error:", err);
+    logger.error("[Email API] /contact error:", err?.message || err);
     next(err);
   }
 }

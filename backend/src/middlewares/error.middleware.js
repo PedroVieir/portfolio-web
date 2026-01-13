@@ -1,5 +1,7 @@
+const logger = require('../utils/logger');
+
 function errorHandler(err, req, res, next) {
-  console.error("[Email API] Unhandled error:", err);
+  logger.error('[Email API] Unhandled error:', err?.message || err);
   res.status(500).json({
     error: "Erro interno",
     message: err?.message || "unknown",
