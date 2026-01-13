@@ -9,11 +9,13 @@ const env = {
   CORS_ORIGIN: process.env.CORS_ORIGIN || "*",
 
   CONTACT_TO: required("CONTACT_TO"),
-
-  GMAIL_USER: required("GMAIL_USER"),
-  GMAIL_APP_PASSWORD: required("GMAIL_APP_PASSWORD"),
-  GMAIL_PORT: Number(process.env.GMAIL_PORT || 465),
   MAIL_FROM_NAME: process.env.MAIL_FROM_NAME || "Email API",
+
+  // Gmail API (OAuth2)
+  GMAIL_API_CLIENT_ID: required("GMAIL_API_CLIENT_ID"),
+  GMAIL_API_CLIENT_SECRET: required("GMAIL_API_CLIENT_SECRET"),
+  GMAIL_API_REFRESH_TOKEN: required("GMAIL_API_REFRESH_TOKEN"),
+  GMAIL_API_USER: required("GMAIL_API_USER"), // o Gmail que efetivamente envia
 };
 
 module.exports = { env };

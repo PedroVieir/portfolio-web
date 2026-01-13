@@ -10,6 +10,12 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
+credentials.json
+
+token.json
+
+tools/*.json
+
 *.swp
 *.swo
 *~

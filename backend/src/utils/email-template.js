@@ -6,7 +6,6 @@ function buildContactEmail({ name, email, message }) {
   const safeMessage = escapeHtml(message).replaceAll("\n", "<br/>");
 
   const iso = new Date().toISOString();
-
   const subject = `Novo contato: ${name}`.slice(0, 200);
 
   const text =

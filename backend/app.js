@@ -11,8 +11,7 @@ const { errorHandler } = require("./src/middlewares/error.middleware");
 const app = express();
 
 // Importante: habilite trust proxy antes do rateLimit
-// Em ambientes com proxy (Railway, etc.), isso evita o erro do X-Forwarded-For
-app.set("trust proxy", 1); // :contentReference[oaicite:2]{index=2}
+app.set("trust proxy", 1);
 
 // Segurança / headers
 app.use(helmet());
@@ -28,6 +27,7 @@ console.log("[Email API] CORS allowed origins:", allowedOrigins);
 app.use(
   cors({
     origin: function (origin, callback) {
+      // Sem origin (requests server-to-server/curl) devem ser permitidas
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
